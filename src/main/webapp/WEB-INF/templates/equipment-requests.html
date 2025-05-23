@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Equipment Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0ecff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4369b2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4369b2;
+            color: white;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-approve {
+            background-color: #4CAF50;
+        }
+
+        .btn-approve:hover {
+            background-color: #45a049;
+        }
+
+        .btn-reject {
+            background-color: #f44336;
+        }
+
+        .btn-reject:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <!-- Sidebar -->
+        <div class="sidebar">
+            <h1 class="logo">TVPSS</h1>
+            <ul class="menu">
+                <li>
+                    <a th:href="@{/admin/equipment-requests}">School Equipment</a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/version-requests}">School Version</a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/reports}">Reports</a>
+                </li>
+            </ul>
+            <button class="settings">⚙️ Settings</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Admin Dashboard</h2>
+                <form th:action="@{/auth/logout}">
+                    <button type="submit" class="logout-btn">Log Out</button>
+                </form>
+            </div>
+        <h2>Equipment Requests</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Teacher Name</th>
+                    <th>School Name</th>
+                    <th>Level</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+			    <tr th:each="equipment : ${equipmentRequests}">
+			        <td th:text="${equipment.teacherName}">Teacher Name</td>
+			        <td th:text="${equipment.schoolName}">School Name</td>
+			        <td th:text="${equipment.level}">Level</td>
+			        <td th:text="${equipment.status}">Status</td>
+			        <td>
+			            <a th:href="@{/admin/approve-equipment/{id}(id=${equipment.id})}" class="btn btn-approve">Approve</a>
+			            <a th:href="@{/admin/reject-equipment/{id}(id=${equipment.id})}" class="btn btn-reject">Reject</a>
+			        </td>
+			    </tr>
+			</tbody>
+
+
+        </table>
+    </div>
+    </div>
+</body>
+</html>

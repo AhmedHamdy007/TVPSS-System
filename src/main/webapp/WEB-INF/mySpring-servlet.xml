@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/data/jpa
+           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <mvc:annotation-driven />
+    <context:component-scan base-package="com.example" />
+    <context:component-scan base-package="com.example.controller" />
+    <context:component-scan base-package="com.example.repository" />
+    <context:component-scan base-package="com.example.security" />
+    
+    
+    <!-- Add these missing configurations -->
+<jpa:repositories base-package="com.example.repository" />
+
+<!-- Fix the Hibernate dialect - you're using PostgreSQL but MySQL dialect -->
+<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+    <property name="showSql" value="true" />
+    <property name="generateDdl" value="true" />
+    <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect" />
+</bean>
+
+    <!-- Thymeleaf Configuration -->
+    <bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="WEB-INF/templates/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML" />
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+    <bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />
+    </bean>
+    <bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine" />
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+
+    <!-- DataSource Configuration -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+    <property name="driverClassName" value="org.postgresql.Driver" />
+    <property name="url" value="jdbc:postgresql://localhost:5432/school_management" />
+    <property name="username" value="postgres" />
+    <property name="password" value="123" />
+</bean>
+
+
+    <!-- JPA Configuration -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="packagesToScan" value="com.example.model" />
+    <property name="jpaVendorAdapter">
+        <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+            <property name="showSql" value="true" />
+            <property name="generateDdl" value="true" />
+            <property name="databasePlatform" value="org.hibernate.dialect.PostgreSQLDialect" />
+        </bean>
+    </property>
+    <property name="jpaProperties">
+    <props>
+        <prop key="hibernate.hbm2ddl.auto">validate</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <!-- Add this to automatically create the discriminator column -->
+    </props>
+</property>
+</bean>
+
+    <!-- Transaction Management -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+</beans>

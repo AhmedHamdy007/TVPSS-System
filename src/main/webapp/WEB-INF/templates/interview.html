@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Interviews</title>
+    <style>
+        /* Modern Reset */
+		* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #f4f7fe;
+    color: #2d3748;
+}
+
+/* Container */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #2c5282 0%, #2b6cb0 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    position: fixed;
+    height: 100vh;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+.menu {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.menu li {
+    margin: 0.5rem 0;
+}
+
+.menu a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.menu a:hover, .menu a.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+    color: white;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* Applications Section */
+.applications-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* Application Cards */
+.application-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.application-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.application-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.application-header {
+    background: linear-gradient(90deg, #2c5282 0%, #2b6cb0 100%);
+    padding: 1.25rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.application-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.application-details {
+    padding: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #4a5568;
+    flex: 1;
+}
+
+.detail-value {
+    flex: 2;
+    color: #2d3748;
+}
+
+.remarks-section {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.remarks-title {
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 0.75rem;
+}
+
+/* Interview Styles */
+.interview-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.interview-header {
+    background: linear-gradient(90deg, #2c5282 0%, #2b6cb0 100%);
+    padding: 1.25rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.interview-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.interview-date {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.interview-details {
+    padding: 1.5rem;
+}
+
+/* Filter Bar */
+.filter-bar {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-bar input[type="date"] {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.filter-btn {
+    background: linear-gradient(90deg, #2c5282 0%, #2b6cb0 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.clear-btn {
+    background: #f56565;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+}
+
+.status-Approved, .status-approved {
+    background-color: #48bb78;
+    color: white;
+}
+
+.status-Pending, .status-pending {
+    background-color: #ecc94b;
+    color: white;
+}
+
+.status-Rejected, .status-rejected {
+    background-color: #f56565;
+    color: white;
+}
+
+/* Form Elements */
+.form-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.form-input, select, textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+    }
+    
+    .main-content {
+        margin-left: 220px;
+    }
+    
+    .application-cards {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .application-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .new-application-btn, .submit-btn, .logout-btn {
+    background: linear-gradient(90deg, #2c5282 0%, #2b6cb0 100%);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+    
+    .interview-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h1 class="logo">TVPSS</h1>
+            <ul class="menu">
+                <li>
+                    <a th:href="@{/student/dashboard}">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/student/talent-form}">
+                        Submit Application
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/student/info}">
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/student/interviews}" th:classappend="${activePage == 'interviews'} ? 'active' : ''">
+                        My Interviews
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>My Interviews</h2>
+                <div class="actions">
+                    <button class="logout-btn" th:onclick="'window.location.href=\'/logout\''">Log Out</button>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-bar">
+			    <h3>Filter Interviews</h3>
+			    <form th:action="@{/student/interviews}" method="get">
+			        <input type="date" id="date" name="date" th:value="${selectedDate}">
+			        <button type="submit" class="filter-btn">Filter</button>
+			        <a th:href="@{/student/interviews}" class="btn clear-btn">Clear Filters</a>
+			    </form>
+			</div>
+
+            <!-- Interviews List -->
+            <div th:each="interview : ${interviews}" class="interview-card">
+			    <div class="interview-header">
+			        <h3 th:text="${'Interview with ' + interview.teacher.fullName}">Teacher Name</h3>
+			        <p>
+			            <strong>Date:</strong> 
+			            <span th:text="${interview.scheduledDate != null ? interview.scheduledDate.format(T(java.time.format.DateTimeFormatter).ofPattern('dd-MM-yyyy HH:mm')) : 'No Date Scheduled'}">
+			                Date
+			            </span>
+			        </p>
+			    </div>
+			    <div class="interview-details">
+			        <p th:text="${interview.status}">Status</p>
+			        <p th:if="${interview.notes}" th:text="${interview.notes}">Notes</p>
+			    </div>
+			</div>
+      </div>
+    </div>
+</body>
+</html>

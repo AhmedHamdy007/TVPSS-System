@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Students List</title>
+    <link rel="stylesheet" type="text/css" href="dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h1 class="logo">TVPSS</h1>
+            <ul class="menu">
+                <li>
+                    <a href="#" th:href="@{/student/profile}">
+                        <span class="icon">📂</span> Personal Information
+                    </a>
+                </li>
+                <li>
+                    <a href="#" th:href="@{/student/application}">
+                        <span class="icon">📊</span> Talent Application Form
+                    </a>
+                </li>
+            </ul>
+            <button class="settings">⚙️ Settings</button>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="actions">
+                    <span class="icon user">👤</span>
+                    <button class="logout-btn" onclick="window.location.href='/login';">Log Out</button>
+                </div>
+            </div>
+            <div class="content">
+                <h4>List of Students</h4>
+                <table class="students-table">
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Application Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Iterate through the list of students -->
+                        <tr th:each="student : ${students}">
+                            <td th:text="${student.fullName}"></td>
+                            <td th:text="${student.email}"></td>
+                            <td th:text="${student.username}"></td>
+                            <td th:text="${student.applicationStatus}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

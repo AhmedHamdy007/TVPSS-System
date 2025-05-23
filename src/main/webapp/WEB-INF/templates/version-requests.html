@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Version Requests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0ecff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4369b2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4369b2;
+            color: white;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-approve {
+            background-color: #4CAF50;
+        }
+
+        .btn-approve:hover {
+            background-color: #45a049;
+        }
+
+        .btn-reject {
+            background-color: #f44336;
+        }
+
+        .btn-reject:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Version Requests</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Version Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="version : ${versionRequests}">
+                    <td th:text="${version.name}">Version Name</td>
+                    <td th:text="${version.status}">Pending</td>
+                    <td>
+                        <a th:href="@{/admin/approve-version/{id}(id=${version.id})}" class="btn btn-approve">Approve</a>
+                        <a th:href="@{/admin/reject-version/{id}(id=${version.id})}" class="btn btn-reject">Reject</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
